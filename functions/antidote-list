@@ -31,7 +31,7 @@
 
   for bundledir in $bundles; do
     bundledir=${bundledir:h}
-    local url=$(git -C "$bundledir" config remote.origin.url)
+    local url=$(lgit -C "$bundledir" config remote.origin.url)
     if (( $#o_dirs )); then
       output+=($bundledir)
     elif (( $#o_url )); then

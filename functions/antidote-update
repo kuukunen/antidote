@@ -45,18 +45,18 @@
 
     # update all bundles
     for bundledir in $(antidote-list --dirs); do
-      url=$(git -C "$bundledir" config remote.origin.url)
+      url=$(lgit -C "$bundledir" config remote.origin.url)
       repo="${url:h:t}/${${url:t}%.git}"
       print "antidote: checking for updates: $url"
       () {
-        local oldsha=$(git -C "$1" rev-parse --short HEAD)
-        git -C "$1" pull --quiet --ff --rebase --autostash
-        git -C "$1" submodule --quiet sync --recursive
-        git -C "$1" submodule --quiet update --init --recursive --depth 1
-        local newsha=$(git -C "$1" rev-parse --short HEAD)
+        local oldsha=$(lgit -C "$1" rev-parse --short HEAD)
+        lgit -C "$1" pull --quiet --ff --rebase --autostash
+        lgit -C "$1" submodule --quiet sync --recursive
+        lgit -C "$1" submodule --quiet update --init --recursive --depth 1
+        local newsha=$(lgit -C "$1" rev-parse --short HEAD)
         if [[ $oldsha != $newsha ]]; then
           print "${green}antidote: updated: $2 ${oldsha} -> ${newsha}${normal}"
-          git -C "$1" --no-pager log --oneline --ancestry-path ${oldsha}..${newsha} 2>/dev/null
+          lgit -C "$1" --no-pager log --oneline --ancestry-path ${oldsha}..${newsha} 2>/dev/null
         fi
 
         # recompile bundles
@@ -76,7 +76,7 @@
   if (( $#o_self )) || ! (( $#o_bundles )); then
     print "Updating antidote..."
     if [[ -d "${0:A:h:h}/.git" ]]; then
-      git -C "${0:A:h:h}" pull --quiet --ff --rebase --autostash
+      lgit -C "${0:A:h:h}" pull --quiet --ff --rebase --autostash
       print "antidote self-update complete.\n"
 
       # setup antidote again
